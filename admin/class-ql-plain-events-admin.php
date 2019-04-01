@@ -100,4 +100,62 @@ class Ql_Plain_Events_Admin {
 
 	}
 
+	/**
+	 * Register the 'Event' custom post type
+	 */
+
+	public function event_custom_posttype() {
+
+		$event_labels = array(
+			'name'               => 'Events',
+			'singular_name'      => 'Event',
+			'all_items'          => 'All Events',
+			'add_new_item'       => 'Add New Event',
+			'add_new'            => 'New Event',
+			'new_item'           => 'New Event',
+			'edit_item'          => 'Edit Event',
+			'view_item'          => 'View Event',
+			'search_items'       => 'Search Events',
+			'not_found'          => 'No events found',
+			'not_found_in_trash' => 'No events found in Trash',
+		);
+
+		$event_args = array(
+			'labels'             => $event_labels,
+			'menu_icon'          => 'dashicons-calendar-alt',
+			'public'             => true,
+			'can_export'         => true,
+			'show_in_nav_menus'  => true,
+			'has_archive'        => true,
+			'show_ui'            => true,
+			'show_in_rest'       => true,
+			'capability_type'    => 'post',
+			'taxonomies'         => array( 'event_cat' ),
+			'rewrite'            => array( 'slug' => 'event' ),
+			'supports'           => array( 'title', 'thumbnail', 'editor' ),
+		);
+
+		register_post_type( 'event', $event_args );
+
+	}
+
+	/**
+	 * Register the 'Event Categories' taxonomy
+	 */
+
+	public function event_categories() {
+
+
+		$event_cat_args = array(
+			'label'         => 'Event Categories',
+			'hierarchical'  => true,
+			'show_in_rest'  => true,
+			'rewrite'       => array( 'slug' => 'event_category' ),
+		);
+
+		register_taxonomy( 'event_category', 'event', $event_cat_args );
+
+	}
+
+
 }
