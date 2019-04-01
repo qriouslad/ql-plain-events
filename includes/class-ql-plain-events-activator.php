@@ -31,6 +31,8 @@ class Ql_Plain_Events_Activator {
 	 */
 	public static function activate() {
 
+		flush_rewrite_rules();
+
 	}
 
 }
