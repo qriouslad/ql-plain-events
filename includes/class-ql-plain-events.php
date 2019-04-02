@@ -160,7 +160,8 @@ class Ql_Plain_Events {
 		$this->loader->add_action( 'init', $plugin_admin, 'event_categories' );
 		$this->loader->add_action( 'add_meta_boxes', $plugin_admin, 'event_metabox' );
 		$this->loader->add_action( 'save_post', $plugin_admin, 'event_save_metadata' );
-
+		$this->loader->add_filter( 'manage_event_posts_columns', $plugin_admin, 'event_custom_columns' );
+		$this->loader->add_action( 'manage_event_posts_custom_column', $plugin_admin, 'event_custom_columns_content', 10, 2 );
 	}
 
 	/**
