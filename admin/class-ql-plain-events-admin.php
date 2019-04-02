@@ -223,17 +223,19 @@ class Ql_Plain_Events_Admin {
 
 		$event_link = get_post_meta( $post->ID, 'event-link', true );
 
+		$date_format = get_option( 'date_format' );
+
 		// Metabox fields
 		?>
 
 		<p>
 			<label for="event-start-date">Start date</label>
-			<input class="widefat" id="event-start-date" type="text" name="event-start-date" required maxlength="40" placeholder="Use datepicker" value="<?php echo esc_attr( $event_end_date ); ?>" />
+			<input class="widefat" id="event-start-date" type="text" name="event-start-date" required maxlength="40" placeholder="Use datepicker" value="<?php echo date_i18n( $date_format, esc_attr( $event_start_date ) ); ?>" />
 		</p>
 
 		<p>
 			<label for="event-end-date">End date</label>
-			<input class="widefat" id="event-end-date" type="text" name="event-end-date" required maxlength="40" placeholder="Use datepicker" value="<?php echo esc_attr( $event_end_date ); ?>" />
+			<input class="widefat" id="event-end-date" type="text" name="event-end-date" required maxlength="40" placeholder="Use datepicker" value="<?php echo date_i18n( $date_format, esc_attr( $event_end_date ) ); ?>" />
 		</p>
 
 		<p>
@@ -285,13 +287,13 @@ class Ql_Plain_Events_Admin {
 		// Check values and save fields
 		if ( isset( $_POST['event-start-date'] ) ) {
 
-			update_post_meta( $post_id, 'event-start-date', sanitize_text_field( $_POST['event-start-date'] ) );
+			update_post_meta( $post_id, 'event-start-date', sanitize_text_field( strtotime( $_POST['event-start-date'] ) ) );
 
 		}
 
 		if ( isset( $_POST['event-end-date'] ) ) {
 			
-			update_post_meta( $post_id, 'event-end-date', sanitize_text_field( $_POST['event-end-date'] ) );
+			update_post_meta( $post_id, 'event-end-date', sanitize_text_field( strtotime( $_POST['event-end-date'] ) ) );
 
 		}
 
@@ -340,13 +342,15 @@ class Ql_Plain_Events_Admin {
 	 */
 	public function event_custom_columns_content( $column_name, $post_id ) {
 
+		$date_format = get_option( 'date_format' );
+
 		if( 'start_date_column' == $column_name ) {
 
-			$start_date = get_post_meta( $post_id, 'event-start-date', true );
+			$event_start_date = get_post_meta( $post_id, 'event-start-date', true );
 
-			if ( ! empty( $start_date ) ) {
+			if ( ! empty( $event_start_date ) ) {
 
-				echo $start_date;
+				echo date_i18n( $date_format, esc_attr( $event_start_date ) );
 
 			}
 
@@ -354,11 +358,11 @@ class Ql_Plain_Events_Admin {
 
 		if( 'end_date_column' == $column_name ) {
 
-			$end_date = get_post_meta( $post_id, 'event-end-date', true );
+			$event_end_date = get_post_meta( $post_id, 'event-end-date', true );
 
-			if ( ! empty( $end_date ) ) {
+			if ( ! empty( $event_end_date ) ) {
 
-				echo $end_date;
+				echo date_i18n( $date_format, esc_attr( $event_end_date ) );
 
 			}
 
@@ -388,6 +392,67 @@ class Ql_Plain_Events_Admin {
 
 		}
 
+	}
+
+	/**
+	 * Make event columns sortable
+	 *
+	 * @since    1.5.0
+	 */
+	public function event_column_register_sortable( $columns ) {
+
+		$columns['start_date_column'] = 'event-start-date';
+		$columns['end_date_column'] = 'event-end-date';
+
+		return $columns;
+
+	}
+
+	/**
+	 * Determine sorting parameter
+	 *
+	 * @since 1.5.0
+	 */
+	public function event_startdate_column_orderby( $vars ) {
+
+		if ( is_admin() ) {
+
+			if ( isset( $vars['orderby'] ) && 'event-start-date' == $vars['orderby'] ) {
+
+				$vars = array_merge( $vars, array(
+					'meta_key' => 'event-start-date',
+					'orderby'  => 'meta_value_num',
+				) );
+
+			}
+
+		}
+
+		return $vars;
+
+	}
+
+	/**
+	 * Determine sorting parameter
+	 *
+	 * @since 1.5.0
+	 */
+	public function event_enddate_column_orderby( $vars ) {
+
+		if ( is_admin() ) {
+
+			if ( isset( $vars['orderby'] ) && 'event-end-date' == $vars['orderby'] ) {
+
+				$vars = array_merge( $vars, array(
+					'meta_key' => 'event-end-date',
+					'orderby'  => 'meta_value_num',
+				) );
+
+			}
+
+		}
+
+		return $vars;
 
 	}
 

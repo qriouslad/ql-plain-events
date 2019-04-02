@@ -162,6 +162,11 @@ class Ql_Plain_Events {
 		$this->loader->add_action( 'save_post', $plugin_admin, 'event_save_metadata' );
 		$this->loader->add_filter( 'manage_event_posts_columns', $plugin_admin, 'event_custom_columns' );
 		$this->loader->add_action( 'manage_event_posts_custom_column', $plugin_admin, 'event_custom_columns_content', 10, 2 );
+		$this->loader->add_filter( 'manage_edit-event_sortable_columns', $plugin_admin, 'event_column_register_sortable' );
+		$this->loader->add_filter( 'request', $plugin_admin, 'event_startdate_column_orderby' );
+		$this->loader->add_filter( 'request', $plugin_admin, 'event_enddate_column_orderby' );
+
+
 	}
 
 	/**
