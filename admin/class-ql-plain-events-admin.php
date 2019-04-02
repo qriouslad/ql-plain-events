@@ -107,7 +107,6 @@ class Ql_Plain_Events_Admin {
 		 */
 
 		global $post_type;
-		global $wp_locale;
 
 		if ( 'event' != $post_type ) {
 
@@ -313,6 +312,82 @@ class Ql_Plain_Events_Admin {
 			update_post_meta( $post_id, 'event-link', sanitize_text_field( $_POST['event-link'] ) );
 
 		}
+
+	}
+
+	/**
+	 * Add dashboard event columns
+	 *
+	 * @since    1.4.0
+	 */
+	public function event_custom_columns( $defaults ) {
+
+		unset( $defaults['date'] );
+
+		$defaults['start_date_column'] = 'Start date';
+		$defaults['end_date_column'] = 'End date';
+		$defaults['time_column'] = 'Time';
+		$defaults['location_column'] = 'Location';
+
+		return $defaults;
+
+	}
+
+	/**
+	 * Get data for the event columns
+	 *
+	 * @since    1.4.0
+	 */
+	public function event_custom_columns_content( $column_name, $post_id ) {
+
+		if( 'start_date_column' == $column_name ) {
+
+			$start_date = get_post_meta( $post_id, 'event-start-date', true );
+
+			if ( ! empty( $start_date ) ) {
+
+				echo $start_date;
+
+			}
+
+		}
+
+		if( 'end_date_column' == $column_name ) {
+
+			$end_date = get_post_meta( $post_id, 'event-end-date', true );
+
+			if ( ! empty( $end_date ) ) {
+
+				echo $end_date;
+
+			}
+
+		}
+
+		if( 'time_column' == $column_name ) {
+
+			$event_time = get_post_meta( $post_id, 'event-time', true );
+
+			if ( ! empty( $event_time ) ) {
+
+				echo $event_time;
+
+			}
+
+		}
+
+		if( 'location_column' == $column_name ) {
+
+			$event_location = get_post_meta( $post_id, 'event-location', true );
+
+			if ( ! empty( $event_location ) ) {
+
+				echo $event_location;
+
+			}
+
+		}
+
 
 	}
 
