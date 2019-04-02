@@ -29,4 +29,10 @@
 	 * practising this, we should strive to set a better example in our own work.
 	 */
 
+	 jQuery(document).ready(function ($) {
+	 	$('#event-start-date, #event-end-date').datepicker({
+	 		dateFormat: 'DD, d MM, yy'
+	 	});
+	 });
+
 })( jQuery );
