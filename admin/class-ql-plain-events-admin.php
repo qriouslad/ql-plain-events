@@ -73,7 +73,17 @@ class Ql_Plain_Events_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/ql-plain-events-admin.css', array(), $this->version, 'all' );
+		global $post_type;
+
+		if ( 'event' != $post_type ) {
+
+			return;
+
+		} else {
+
+			wp_enqueue_style( $this->plugin_name . '_datepicker_style', plugin_dir_url( __FILE__ ) . 'css/ql-plain-events-admin.css', array(), $this->version, 'all' );
+
+		}
 
 	}
 
@@ -96,7 +106,18 @@ class Ql_Plain_Events_Admin {
 		 * class.
 		 */
 
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/ql-plain-events-admin.js', array( 'jquery' ), $this->version, false );
+		global $post_type;
+		global $wp_locale;
+
+		if ( 'event' != $post_type ) {
+
+			return;
+
+		} else {
+
+			wp_enqueue_script( $this->plugin_name . '_datepicker_script', plugin_dir_url( __FILE__ ) . 'js/ql-plain-events-admin.js', array( 'jquery', 'jquery-ui-datepicker' ), $this->version, false  );
+
+		}
 
 	}
 
@@ -208,27 +229,27 @@ class Ql_Plain_Events_Admin {
 
 		<p>
 			<label for="event-start-date">Start date</label>
-			<input class="widefat" id="" type="text" name="event-start-date" required maxlength="10" placeholder="" value="<?php echo esc_attr( $event_end_date ); ?>" />
+			<input class="widefat" id="event-start-date" type="text" name="event-start-date" required maxlength="40" placeholder="Use datepicker" value="<?php echo esc_attr( $event_end_date ); ?>" />
 		</p>
 
 		<p>
 			<label for="event-end-date">End date</label>
-			<input class="widefat" id="" type="text" name="event-end-date" required maxlength="10" placeholder="" value="<?php echo esc_attr( $event_end_date ); ?>" />
+			<input class="widefat" id="event-end-date" type="text" name="event-end-date" required maxlength="40" placeholder="Use datepicker" value="<?php echo esc_attr( $event_end_date ); ?>" />
 		</p>
 
 		<p>
 			<label for="event-time">Time</label>
-			<input class="widefat" id="" type="text" name="event-time" required maxlength="20" placeholder="" value="<?php echo esc_attr( $event_time ); ?>" />
+			<input class="widefat" id="" type="text" name="event-time" required maxlength="20" placeholder="Example: 19:00 - 21:00" value="<?php echo esc_attr( $event_time ); ?>" />
 		</p>
 
 		<p>
 			<label for="event-location">Location</label>
-			<input class="widefat" id="" type="text" name="event-location" required maxlength="100" placeholder="" value="<?php echo esc_attr( $event_location ); ?>" />
+			<input class="widefat" id="" type="text" name="event-location" required maxlength="100" placeholder="Example: Union Square " value="<?php echo esc_attr( $event_location ); ?>" />
 		</p>
 
 		<p>
 			<label for="event-link">Link to more info</label>
-			<input class="widefat" id="" type="text" name="event-link" maxlength="200" placeholder="" value="<?php echo esc_attr( $event_link ); ?>" />
+			<input class="widefat" id="" type="text" name="event-link" maxlength="200" placeholder="Example: www.eventsite.com" value="<?php echo esc_attr( $event_link ); ?>" />
 		</p>
 
 		<?php
