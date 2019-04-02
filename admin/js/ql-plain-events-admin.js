@@ -31,7 +31,7 @@
 
 	 jQuery(document).ready(function ($) {
 	 	$('#event-start-date, #event-end-date').datepicker({
-	 		dateFormat: 'DD, d MM, yy'
+	 		dateFormat: 'MM d, yy'
 	 	});
 	 });
 
