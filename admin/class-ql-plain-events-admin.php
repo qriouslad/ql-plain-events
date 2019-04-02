@@ -102,6 +102,8 @@ class Ql_Plain_Events_Admin {
 
 	/**
 	 * Register the 'Event' custom post type
+	 *
+	 * @since    1.1.0
 	 */
 
 	public function event_custom_posttype() {
@@ -141,6 +143,8 @@ class Ql_Plain_Events_Admin {
 
 	/**
 	 * Register the 'Event Categories' taxonomy
+	 *
+	 * @since    1.1.0
 	 */
 
 	public function event_categories() {
@@ -154,6 +158,140 @@ class Ql_Plain_Events_Admin {
 		);
 
 		register_taxonomy( 'event_category', 'event', $event_cat_args );
+
+	}
+
+	/**
+	 * Register metabox for the 'Event' custom post type
+	 *
+	 * @since    1.2.0
+	 */
+
+	public function event_metabox() {
+
+		add_meta_box(
+			'event-metabox',
+			'Event Details',
+			array( $this, 'event_metabox_cb' ),
+			'event',
+			'normal',
+			'high',
+		);
+
+	}
+
+	/**
+	 * Callback function for the 'Event' metabox
+	 *
+	 * @since    1.2.0
+	 */
+
+	public function event_metabox_cb( $post ) {
+
+		// Generate a nonce field
+		wp_nonce_field( 'event_metabox_nonce', 'event_metabox_nonce' );
+
+		// Get previoiusly saved meta values (if any)
+
+		$event_start_date = get_post_meta( $post->ID, 'event-start-date', true );
+
+		$event_end_date = get_post_meta( $post->ID, 'event-end-date', true );
+
+		$event_time = get_post_meta( $post->ID, 'event-time', true );
+
+		$event_location = get_post_meta( $post->ID, 'event-location', true );
+
+		$event_link = get_post_meta( $post->ID, 'event-link', true );
+
+		// Metabox fields
+		?>
+
+		<p>
+			<label for="event-start-date">Start date</label>
+			<input class="widefat" id="" type="text" name="event-start-date" required maxlength="10" placeholder="" value="<?php echo esc_attr( $event_end_date ); ?>" />
+		</p>
+
+		<p>
+			<label for="event-end-date">End date</label>
+			<input class="widefat" id="" type="text" name="event-end-date" required maxlength="10" placeholder="" value="<?php echo esc_attr( $event_end_date ); ?>" />
+		</p>
+
+		<p>
+			<label for="event-time">Time</label>
+			<input class="widefat" id="" type="text" name="event-time" required maxlength="20" placeholder="" value="<?php echo esc_attr( $event_time ); ?>" />
+		</p>
+
+		<p>
+			<label for="event-location">Location</label>
+			<input class="widefat" id="" type="text" name="event-location" required maxlength="100" placeholder="" value="<?php echo esc_attr( $event_location ); ?>" />
+		</p>
+
+		<p>
+			<label for="event-link">Link to more info</label>
+			<input class="widefat" id="" type="text" name="event-link" maxlength="200" placeholder="" value="<?php echo esc_attr( $event_link ); ?>" />
+		</p>
+
+		<?php
+
+	}
+
+	/**
+	 * Function to save event meta data
+	 *
+	 * @since    1.2.0
+	 */
+	public function event_save_metadata( $post_id ) {
+
+		// Check if nonce is set
+		if ( ! isset( $_POST['event_metabox_nonce'] ) ) {
+			return;
+		}
+
+		// Verify that nonce is valid
+		if ( ! wp_verify_nonce( $_POST['event_metabox_nonce'], 'event_metabox_nonce' ) ) {
+			return;
+		}
+
+		// If this is an autosave, our form has not been submitted, so, do nothing
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		// Check post type and user permission
+		if ( ( get_post_type() != 'event' ) || ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
+		}
+
+		// Check values and save fields
+		if ( isset( $_POST['event-start-date'] ) ) {
+
+			update_post_meta( $post_id, 'event-start-date', sanitize_text_field( $_POST['event-start-date'] ) );
+
+		}
+
+		if ( isset( $_POST['event-end-date'] ) ) {
+			
+			update_post_meta( $post_id, 'event-end-date', sanitize_text_field( $_POST['event-end-date'] ) );
+
+		}
+
+		if ( isset( $_POST['event-time'] ) ) {
+			
+			update_post_meta( $post_id, 'event-time', sanitize_text_field( $_POST['event-time'] ) );
+
+		}
+
+		if ( isset( $_POST['event-location'] ) ) {
+			
+			update_post_meta( $post_id, 'event-location', sanitize_text_field( $_POST['event-location'] ) );
+
+		}
+
+		if ( isset( $_POST['event-link'] ) ) {
+			
+			update_post_meta( $post_id, 'event-link', sanitize_text_field( $_POST['event-link'] ) );
+
+		}
 
 	}
 
