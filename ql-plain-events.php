@@ -17,7 +17,7 @@
  * Plugin URI:        https://github.com/qriouslad/ql-plain-events
  * GitHub Plugin URI: https://github.com/qriouslad/ql-plain-events
  * Description:       This WordPress plugin enables the creation and listing of events custom post types.
- * Version:           1.5.0
+ * Version:           1.6.0
  * Author:            Bowo
  * Author URI:        https://bowo.io
  * License:           GPL-2.0+
