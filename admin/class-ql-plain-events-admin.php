@@ -230,12 +230,12 @@ class Ql_Plain_Events_Admin {
 
 		<p>
 			<label for="event-start-date">Start date</label>
-			<input class="widefat" id="event-start-date" type="text" name="event-start-date" required maxlength="40" placeholder="Use datepicker" value="<?php echo date_i18n( $date_format, esc_attr( $event_start_date ) ); ?>" />
+			<input class="widefat" id="event-start-date" type="text" name="event-start-date" required maxlength="40" placeholder="Use datepicker" value="<?php echo ( ! empty( $event_start_date ) ) ? date_i18n( $date_format, esc_attr( $event_start_date ) ) : ''; ?>" />
 		</p>
 
 		<p>
 			<label for="event-end-date">End date</label>
-			<input class="widefat" id="event-end-date" type="text" name="event-end-date" required maxlength="40" placeholder="Use datepicker" value="<?php echo date_i18n( $date_format, esc_attr( $event_end_date ) ); ?>" />
+			<input class="widefat" id="event-end-date" type="text" name="event-end-date" maxlength="40" placeholder="Use datepicker" value="<?php echo ( ! empty( $event_end_date ) ) ? date_i18n( $date_format, esc_attr( $event_end_date ) ) : ''; ?>" />
 		</p>
 
 		<p>
@@ -455,6 +455,5 @@ class Ql_Plain_Events_Admin {
 		return $vars;
 
 	}
-
 
 }
