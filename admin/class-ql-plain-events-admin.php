@@ -195,7 +195,7 @@ class Ql_Plain_Events_Admin {
 			array( $this, 'event_metabox_cb' ),
 			'event',
 			'normal',
-			'high',
+			'high'
 		);
 
 	}
