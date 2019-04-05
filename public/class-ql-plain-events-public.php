@@ -100,4 +100,118 @@ class Ql_Plain_Events_Public {
 
 	}
 
+	/**
+	 * Shortcode to display upcoming events
+	 *
+	 * @since    1.7.0
+	 */
+	public function upcoming_events_shortcode( $atts ) {
+
+		$atts = shortcode_atts( array(
+			'class' => 'events-listing',
+			'display' => '0',
+			'order' => 'asc',
+			'no_events_text' => 'There are no upcoming events.',
+			), 
+			$atts
+		);
+
+		$today = strtotime( 'today' );
+
+		$events_query_args = array(
+			'post_type' => 'event',
+			'post_status' => 'publish',
+			'meta_key' => 'event-start-date',
+			'meta_value' => $today,
+			'meta_compare' => '>=',
+			'orderby' => 'meta_value_num',
+			'order' => $atts['order'],
+			'posts_per_page' => $atts['display'],
+		);
+
+		$events_query = new WP_Query( $events_query_args );
+
+		$output = '<div class="'. $atts['class'] .'">';
+
+		if ( $events_query->have_posts() ) :
+
+			while( $events_query->have_posts() ) :
+
+				$events_query->the_post();
+
+				$event_title = get_the_title();
+
+				$event_start_date = get_post_meta( get_the_ID(), 'event-start-date', true );
+
+				$event_start_date_year_formatted = date_i18n ( 'Y', $event_start_date );
+
+				$event_end_date = get_post_meta( get_the_ID(), 'event-end-date', true );
+
+				if ( ! empty( $event_end_date ) ) {
+
+					$event_end_date_year_formatted = date_i18n ( 'Y', $event_end_date );
+
+				}
+
+				if ( ! empty( $event_end_date ) && ( $event_start_date_year_formatted == $event_end_date_year_formatted ) ) {
+
+					$event_start_date_formatted = date_i18n ( 'F j', $event_start_date );
+
+				} else {
+
+					$event_start_date_formatted = date_i18n ( 'F j, Y', $event_start_date );
+
+				}
+
+				if ( ! empty( $event_end_date ) ) {
+
+					$event_end_date_formatted = ' - ' .date_i18n ( 'F j, Y', $event_end_date );
+
+				}
+
+				$event_time = get_post_meta( get_the_ID(), 'event-time', true );
+
+				$event_location = get_post_meta( get_the_ID(), 'event-location', true );
+
+				$event_excerpt = wp_trim_words( get_the_content(), 70 );
+
+				$event_image = get_the_post_thumbnail( get_the_ID(), 'medium', array( 'class' => 'alignright' ) );
+
+				$output .= '<h4>'.$event_title.'</h4>';
+				
+				$output .= '<div class="event-meta">'.$event_image.'<strong>Date</strong>: '.$event_start_date_formatted.''.$event_end_date_formatted.'<br /> <strong>Time</strong>: '.$event_time.'<br /> <strong>Location</strong>: '.$event_location.'</div>';
+
+				$output .= '<p>'.$event_excerpt.'</p>';
+
+				unset( $event_start_date );
+				unset( $event_start_date_formatted );
+				unset( $event_end_date );
+				unset( $event_end_date_formatted );
+
+			endwhile;
+
+		else:
+
+			$output .= '<p>' . $atts['no_events_text'] . '</p>';
+
+		endif;
+
+		$output .= '</div>';
+
+		return $output;
+
+	}
+
+	/**
+	 * Register all shortcodes
+	 *
+	 * @since 1.7.0
+	 */
+	public function register_shortcodes() {
+
+		add_shortcode( 'upcoming_events', array( $this, 'upcoming_events_shortcode' ) );
+
+	}
+
+
 }
