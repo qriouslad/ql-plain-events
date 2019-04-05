@@ -15,6 +15,7 @@
  * @wordpress-plugin
  * Plugin Name:       Plain Events
  * Plugin URI:        https://github.com/qriouslad/ql-plain-events
+ * GitHub Plugin URI: https://github.com/qriouslad/ql-plain-events
  * Description:       This WordPress plugin enables the creation and listing of events custom post types.
  * Version:           1.5.0
  * Author:            Bowo
